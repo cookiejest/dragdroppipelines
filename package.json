@@ -11,14 +11,20 @@
     "@phanmn/plain-draggable": "2.5.14",
     "@vue/cli-plugin-babel": "4.1.1",
     "leader-line-vue": "2.1.1",
-    "vue": "^2.6.11"
+    "panzoom": "^9.4.2",
+    "vue": "^2.6.11",
+    "vuetify": "^2.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "4.1.1",
     "@vue/cli-service": "4.1.1",
     "babel-eslint": "^10.0.3",
+    "deepmerge": "^4.2.2",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.0.1",
+    "node-sass": "^7.0.1",
+    "sass": "^1.32.13",
+    "sass-loader": "10.1.1",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {

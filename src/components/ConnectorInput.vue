@@ -1,11 +1,13 @@
+
 <template>
   <span
     class="input"
+    :class="outputModifier"
     :id="id"
-    draggable="true"
-    @dragstart.stop="onDragStart"
-    @mousedown.stop="() => {}"
-  />
+    @dragover.prevent="onDragOver"
+    @dragleave.prevent="onDragLeave"
+    @drop.stop="onDrop"
+  ><v-icon style="color: white;">mdi-arrow-down-bold-hexagon-outline</v-icon></span>
 </template>
 
 <script>
@@ -20,28 +22,61 @@ export default {
       required: true,
     },
   },
+  data: () => ({
+    outputModifier: "",
+  }),
   methods: {
-    onDragStart(event) {
-      event.dataTransfer.setDragImage(new Image(), 0, 0);
-      event.dataTransfer.setData("type", "connection");
-      event.dataTransfer.setData("element", this.elment);
-      event.dataTransfer.setData("id", this.id);
-      this.$emit("startconnecting", { input: this.id });
+    onDrop(event) {
+      this.outputModifier = "";
+      const type = event.dataTransfer.getData("type");
+      if (type !== "connection") {
+        return;
+      }
+      const element = event.dataTransfer.getData("element");
+      if (element === this.elment) {
+        this.$emit("cancelconnecting");
+        return;
+      }
+      const inputId = event.dataTransfer.getData("id");
+      this.$emit("stopconnecting", { input: inputId, output: this.id });
+    },
+    onDragOver(event) {
+      const type = event.dataTransfer.getData("type");
+      if (type !== "connection") {
+        return;
+      }
+      const element = event.dataTransfer.getData("element");
+      if (element === this.elment) {
+        this.outputModifier = "invalid";
+      } else {
+        this.outputModifier = "valid";
+      }
+    },
+    onDragLeave(event) {
+      this.outputModifier = "";
+      const type = event.dataTransfer.getData("type");
+      if (type !== "connection") {
+        return;
+      }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .input {
   position: absolute;
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
   transition: height 0.2s, width 0.2s;
-  bottom: 0;
+  top: 0;
   right: 50%;
-  transform: translate(50%, 50%);
-  background-color: green;
+  transform: translate(50%, -50%);
+}
+.input.valid {
+  height: 30px;
+  width: 30px;
+}
+.input.invalid {
+  opacity: 0.2;
+  cursor: not-allowed;
 }
 </style>
