@@ -15,7 +15,7 @@
       <v-list v-for="category in toolset" :key="category.name" style="width: 244px">
        <h5> {{category.name}}</h5>
         <v-list-item v-for="tool in category.tools" :key="tool.name" link>
-          <draggable  :type="tool.name" />
+          <draggable  :tool="tool" />
         </v-list-item> </v-list
     ></v-row>
   </v-col>
@@ -65,9 +65,18 @@ export default {
       {
         name: "Vizualise",
         tools: [
+                    { name: "KPI" },
           { name: "bar chart" },
           { name: "line chart" },
           { name: "pie chart" },
+        ],
+      },
+      {
+        name: "Alert",
+        tools: [
+          { name: "Email" },
+          { name: "Slack Message" },
+          { name: "Teams Message" },
         ],
       },
       { name: "Interface", tools: [{ name: "App" }, { name: "Form" }, { name: "Report" }, { name: "Chat Bot" }] },

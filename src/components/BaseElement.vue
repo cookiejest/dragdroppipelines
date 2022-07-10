@@ -1,35 +1,27 @@
 <template>
   <div ref="element" class="element" draggable="false" :style="style">
-   
-          <v-card
-          >
-          <v-system-bar
-      color="pink darken-2"
-      dark
-    >
-      <v-spacer></v-spacer>
+    <v-card>
+      <v-system-bar color="pink darken-2" dark>
+        <v-spacer></v-spacer>
 
-    
-    <button
-      v-on:click="onRemove"
-    >
-         <v-icon>mdi-close</v-icon>
-    </button>
-   
-    </v-system-bar>
-            <v-card-title class="text-h5">
-              {{this.name}}
-            </v-card-title>
+        <button v-on:click="onRemove">
+          <v-icon>mdi-close</v-icon>
+        </button>
+      </v-system-bar>
+      <v-card-title class="text-h5">
+        {{ this.tool.name }}
+      </v-card-title>
 
-            <v-card-subtitle>Listen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
+      <v-card-subtitle
+        >{{this.tool.description}}</v-card-subtitle
+      >
 
-            <!-- <v-card-actions>
+      <!-- <v-card-actions>
               <v-btn text>
                 Edit
               </v-btn>
             </v-card-actions> -->
-          </v-card>
-
+    </v-card>
 
     <connector-output
       v-for="output in outputs"
@@ -64,6 +56,10 @@ export default {
       type: String,
       required: true,
     },
+    tool: {
+      type: Object,
+      required: true,
+    },
     top: {
       type: Number,
       default: 0,
@@ -85,7 +81,7 @@ export default {
     style() {
       return {
         top: this.top + "px",
-        left: this.left + "px"
+        left: this.left + "px",
       };
     },
   },
@@ -101,7 +97,7 @@ export default {
       this.$emit("drag", { left: event.left, top: event.top });
     },
     onStartConnecting(event) {
-     // console.log(event)
+      // console.log(event)
       this.$emit("startconnecting", event);
     },
     onStopConnecting(event) {

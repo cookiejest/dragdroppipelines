@@ -10,6 +10,7 @@
       v-for="(element, index) in elements"
       :key="index"
       :name="element.name"
+      :tool="JSON.parse(element.tool)"
       :top="element.top"
       :left="element.left"
       :inputs="element.inputs"
@@ -19,7 +20,6 @@
       @stopconnecting="onStopConnecting"
       @cancelconnecting="onConnectionCancel"
     />
-
 
     <span
       ref="tmpLineTarget"
@@ -52,15 +52,16 @@ export default {
   mounted() {
     var element = document.querySelector("#maincanvas");
 
-    element.addEventListener('mousemove', (event) => {
-	console.log(`Mouse X: ${event.clientX}, Mouse Y: ${event.clientY}`);
+    element.addEventListener("mousemove", (event) => {
+     // console.log(`Mouse X: ${event.clientX}, Mouse Y: ${event.clientY}`);
 
-this.tmpConnectionPosition = {
-  top: event.clientY,
-  left: event.clientX
-}
+      this.tmpConnectionPosition = {
+        top: event.clientY,
+        left: event.clientX,
+      };
+    });
 
-});
+    
 
     // And pass it to panzoom
 
@@ -76,7 +77,7 @@ this.tmpConnectionPosition = {
       "transform",
       function () {
         // This event will be called along with events above.
-        console.log("transform done");
+       // console.log("transform done");
 
         this.onElementDrag();
       }.bind(this)
@@ -96,10 +97,9 @@ this.tmpConnectionPosition = {
           break;
       }
     },
-    onDragOver(event) {
+    onDragOver() {
       //const type = event.DataTransfer.type;
-
-      console.log('drag over event type', event.DataTransfer.getData("type"))
+      //    console.log('drag over event type', event.DataTransfer.getData("type"))
       // switch (type) {
       //   case "element":
       //     break;
@@ -113,11 +113,13 @@ this.tmpConnectionPosition = {
     onElementDrop(event) {
       const top = event.dataTransfer.getData("top");
       const left = event.dataTransfer.getData("left");
-
+      const tool = event.dataTransfer.getData("tool");
+//console.log('the event', tool)
       const count = this.elements.length;
       this.elements.push({
         name: `element-${count}`,
         top: event.offsetY - top,
+        tool: tool,
         left: event.offsetX - left,
         inputs: [`input-${count}`],
         outputs: [`output-${count}`],
@@ -125,13 +127,12 @@ this.tmpConnectionPosition = {
     },
     onElementDrag() {
       this.connections.forEach((connection) => connection.position());
-      console.log("connection moving");
+     // console.log("connection moving");
     },
-    onStartConnecting({input }) {
-      console.log(this)
+    onStartConnecting({ input }) {
+      console.log(this);
 
-
-console.log('onStartConnecting X',event.pageX)
+      console.log("onStartConnecting X", event.pageX);
 
       this.tpmConnectionLine = LeaderLine.setLine(
         document.getElementById(input),
@@ -143,7 +144,7 @@ console.log('onStartConnecting X',event.pageX)
       console.log("start connecting", input);
     },
     onConnectionMoving(event) {
-      console.log('event on moving', event)
+      console.log("event on moving", event);
       if (this.tpmConnectionLine) {
         this.tpmConnectionLine.position();
         this.tmpConnectionPosition.top =
@@ -187,9 +188,6 @@ console.log('onStartConnecting X',event.pageX)
 // Colors
 $bg-color: hsl(256, 33, 10);
 $dot-color: hsl(256, 33, 70);
-
-
-
 
 // Dimensions
 $dot-size: 1px;
